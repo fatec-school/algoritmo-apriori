@@ -36,7 +36,7 @@ print(
 )
 
 
-def detectar_anomalia(transacao):
+def detectar_anomalia(dados_transacao):
     """
     Detecta possíveis anomalias em uma transação.
     """
@@ -44,15 +44,15 @@ def detectar_anomalia(transacao):
     motivo = ""
 
     if (
-        transacao["Internacional"] == 1
-        and transacao["Dispositivo_Conhecido"] == 0
+        dados_transacao["Internacional"] == 1
+        and dados_transacao["Dispositivo_Conhecido"] == 0
     ):
         suspeita = True
         motivo = "Transação internacional de dispositivo desconhecido."
 
     if (
-        transacao["Horario_Noturno"] == 1
-        and transacao["Valor_Alto"] == 1
+        dados_transacao["Horario_Noturno"] == 1
+        and dados_transacao["Valor_Alto"] == 1
     ):
         suspeita = True
         motivo = "Valor alto em horário atípico."
@@ -76,11 +76,13 @@ transacao_suspeita = {
     "Dispositivo_Conhecido": 0,
 }
 
-for indice, transacao in enumerate(
-    [transacao_normal, transacao_suspeita],
-    start=1,
-):
-    is_fraude, mensagem = detectar_anomalia(transacao)
+transacoes = [
+    transacao_normal,
+    transacao_suspeita,
+]
+
+for indice, item in enumerate(transacoes, start=1):
+    is_fraude, mensagem = detectar_anomalia(item)
 
     status = "SUSPEITA" if is_fraude else "NORMAL"
 
@@ -88,3 +90,4 @@ for indice, transacao in enumerate(
 
     if is_fraude:
         print(f"Motivo: {mensagem}")
+        
